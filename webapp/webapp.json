@@ -22,11 +22,7 @@
         "location": "[resourceGroup().location]",
         "kind": "app",
         "tags": {
-        }
-        ,
-        "dependsOn": [
-            "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]"
-        ],
+        },
         "properties": {
             "name": "[variables('webAppPortalName')]",
             "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
