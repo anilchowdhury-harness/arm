@@ -12,7 +12,7 @@
     },
     "functions": [],
     "variables": {
-        "appServicePlanName": "AppServicePlan-Test"
+        "appServicePlanName": "AppServicePlan-Nested"
     },
     "resources": [{
         "name": "[variables('appServicePlanName')]",
