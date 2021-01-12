@@ -1,0 +1,42 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "linuxFxVersion": {
+            "type": "string",
+            "defaultValue": "JAVA|8-jre8",
+            "metadata": {
+                "description": "description"
+            }
+        }
+    },
+    "functions": [],
+    "variables": {
+        "webAppPortalName": "WebApp-Test-new",
+        "appServicePlanName": "AppServicePlan-Test"
+    },
+    "resources": [{
+        "name": "[variables('webAppPortalName')]",
+        "type": "Microsoft.Web/sites",
+        "apiVersion": "2018-11-01",
+        "location": "[resourceGroup().location]",
+        "kind": "app",
+        "tags": {
+            "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/appServicePlan1')]": "Resource",
+            "displayName": "[variables('webAppPortalName')]"
+        }
+        ,
+        // "dependsOn": [
+        //     "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]"
+        // ]
+        // ,
+        "properties": {
+            "name": "[variables('webAppPortalName')]",
+            "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
+            "siteConfig": {
+                "linuxFxVersion": "[parameters('linuxFxVersion')]"
+            }
+        }
+    }],
+    "outputs": {}
+}
