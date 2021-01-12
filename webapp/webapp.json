@@ -26,10 +26,9 @@
             "displayName": "[variables('webAppPortalName')]"
         }
         ,
-        // "dependsOn": [
-        //     "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]"
-        // ]
-        // ,
+        "dependsOn": [
+            "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]"
+        ],
         "properties": {
             "name": "[variables('webAppPortalName')]",
             "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
