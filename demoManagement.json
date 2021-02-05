@@ -8,7 +8,7 @@
         },
         "parentMG": {
             "type": "string",
-            "defaultValue": "Anil-Test"
+            "defaultValue": "HarnessDev"
         }
     },
     "resources": [
