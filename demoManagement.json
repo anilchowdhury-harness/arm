@@ -4,7 +4,7 @@
     "parameters": {
         "mgName": {
             "type": "string",
-            "defaultValue": "[concat('mg-', uniqueString(newGuid()))]"
+            "defaultValue": "[concat('anil-mg-', uniqueString(newGuid()))]"
         },
         "parentMG": {
             "type": "string"
