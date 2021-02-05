@@ -7,8 +7,7 @@
             "defaultValue": "[concat('mg-', uniqueString(newGuid()))]"
         },
         "parentMG": {
-            "type": "string",
-            "defaultValue": "HarnessDev"
+            "type": "string"
         }
     },
     "resources": [
