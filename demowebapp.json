@@ -35,7 +35,7 @@
         "location": "[resourceGroup().location]",
         "sku": {
             "name": "[parameters('sku')]",
-            "capacity": 1
+            "capacity": 2
         },
         "kind": "app,linux",
         "tags": {
