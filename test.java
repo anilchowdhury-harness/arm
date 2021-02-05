@@ -1,17 +1,21 @@
-private void printStatus(DeploymentOperation operation) {
-    /*TargetResource targetResource = operation.targetResource();
-    String provisioningState = operation.provisioningState();
-    Object statusMessage = operation.statusMessage();
-    System.out.println(String.format("Target Resource - [%s]", targetResource.resourceName()));
-    System.out.println(String.format("Provisioning State - [%s]", provisioningState));
-    System.out.println(String.format("Status Code - [%s]%n", operation.statusCode()));
-    if (statusMessage != null) {
-      System.out.println(String.format("Status - [%s]", statusMessage));
-    }*/
+<dependency>
+    <groupId>com.azure.resourcemanager</groupId>
+    <artifactId>azure-resourcemanager</artifactId>
+    <version>2.1.0</version>
+</dependency>
+<dependency>
+    <groupId>com.azure</groupId>
+    <artifactId>azure-identity</artifactId>
+    <version>1.2.0</version>
+</dependency>
 
-    if (operation.targetResource() != null) {
-      System.out.println(String.format("%s - %s: %s %s", operation.targetResource().resourceType(),
-          operation.targetResource().resourceName(), operation.provisioningState(),
-          operation.statusMessage() != null ? operation.statusMessage() : ""));
-    }
-  }
+
+400-rest/pom.xml
+<dependency>
+    <groupId>com.azure.resourcemanager</groupId>
+    <artifactId>azure-resourcemanager</artifactId>
+</dependency>
+<dependency>
+    <groupId>com.azure</groupId>
+    <artifactId>azure-identity</artifactId>
+</dependency>
