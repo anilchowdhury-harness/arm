@@ -4,6 +4,7 @@
   "parameters": {
     "targetMG": {
       "type": "string",
+      "defaultValue": "testMg",
       "metadata": {
         "description": "Target Management Group"
       }
