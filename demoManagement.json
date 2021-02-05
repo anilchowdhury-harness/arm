@@ -21,13 +21,13 @@
     }
   },
   "variables": {
-    "mgScope": "[tenantResourceId(\u0027Microsoft.Management/managementGroups\u0027, parameters(\u0027targetMG\u0027))]",
+    "mgScope": "[tenantResourceId('Microsoft.Management/managementGroups', parameters('targetMG'))]",
     "policyDefinition": "LocationRestriction"
   },
   "resources": [
     {
       "type": "Microsoft.Authorization/policyDefinitions",
-      "name": "[variables(\u0027policyDefinition\u0027)]",
+      "name": "[variables('policyDefinition')]",
       "apiVersion": "2019-09-01",
       "properties": {
         "policyType": "Custom",
@@ -37,7 +37,7 @@
           "if": {
             "not": {
               "field": "location",
-              "in": "[parameters(\u0027allowedLocations\u0027)]"
+              "in": "[parameters('allowedLocations')]"
             }
           },
           "then": {
@@ -51,11 +51,11 @@
       "name": "location-lock",
       "apiVersion": "2019-09-01",
       "dependsOn": [
-        "[variables(\u0027policyDefinition\u0027)]"
+        "[variables('policyDefinition')]"
       ],
       "properties": {
-        "scope": "[variables(\u0027mgScope\u0027)]",
-        "policyDefinitionId": "[extensionResourceId(variables(\u0027mgScope\u0027), \u0027Microsoft.Authorization/policyDefinitions\u0027, variables(\u0027policyDefinition\u0027))]"
+        "scope": "[variables('mgScope')]",
+        "policyDefinitionId": "[extensionResourceId(variables('mgScope'), 'Microsoft.Authorization/policyDefinitions', variables('policyDefinition'))]"
       }
     }
   ]
