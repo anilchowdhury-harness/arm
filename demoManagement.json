@@ -4,7 +4,6 @@
   "parameters": {
     "targetMG": {
       "type": "string",
-      "defaultValue": "australiaeast",
       "metadata": {
         "description": "Target Management Group"
       }
