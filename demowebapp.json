@@ -67,19 +67,21 @@
                 "linuxFxVersion": "[parameters('linuxFxVersion')]"
             }
         }
-    },
-    {
-        "name": "anilstoragetest",
-        "type": "Microsoft.Storage/storageAccounts",
-        "apiVersion": "2019-06-01",
-        "tags": {
-            "displayName": "anilstoragetest"
-        },
-        "location": "[resourceGroup().location]",
-        "kind": "StorageV2",
-        "sku": {
-            "name": "Standard_LRS"
-        }
-    }],
+    }
+    #              ,
+    #{
+     #   "name": "anilstoragetest",
+     #   "type": "Microsoft.Storage/storageAccounts",
+      #  "apiVersion": "2019-06-01",
+       # "tags": {
+        #    "displayName": "anilstoragetest"
+       # },
+       # "location": "[resourceGroup().location]",
+       # "kind": "StorageV2",
+       # "sku": {
+       #     "name": "Standard_LRS"
+       # }
+    #}
+                 ],
     "outputs": {}
 }
