@@ -104,7 +104,7 @@
     },
     "storageAccount": {
       "type": "string",
-      "value": "anilstoragetest"
+      "value": "anilstoragetest1"
     }
   }
 }
