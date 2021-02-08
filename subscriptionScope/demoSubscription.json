@@ -13,7 +13,7 @@
     }
   },
   "variables": {
-    "storageName": "[concat(parameters('storagePrefix'), uniqueString(subscription().id, parameters('rgName')))]"
+    "storageName": "[concat(parameters('storagePrefix'), 'test'))]"
   },
   "resources": [
     {
