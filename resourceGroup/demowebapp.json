@@ -27,7 +27,7 @@
     },
     "storageName": {
       "type": "string",
-      "defaultValue": "anilstorage",
+      "defaultValue": "anilstorage"
     }
   },
   "functions": [],
@@ -107,7 +107,7 @@
       "type": "string",
       "value": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_name'))]"
     },
-   "storageAccount": {
+    "storageAccount": {
       "type": "string",
       "value": "[variables('storageAccountName')]"
     }
