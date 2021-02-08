@@ -25,7 +25,7 @@
     "publicIPAddresses_name": {
       "type": "string"
     },
-    "storageName": {
+    "storagename": {
       "type": "string",
       "defaultValue": "anilstorage"
     }
@@ -34,7 +34,7 @@
   "variables": {
     "webAppPortalName": "[concat(parameters('webAppName'), '-webapp')]",
     "appServicePlanName": "[concat('AppServicePlan-', parameters('webAppName'))]",
-    "storageAccountName": "[concat(parameters('storageName'), 'test')]"
+    "storageAccountName": "[concat(parameters('storagename'), 'test')]"
   },
   "resources": [
     {
