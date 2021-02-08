@@ -7,9 +7,6 @@
     },
     "rgLocation": {
       "type": "string"
-    },
-    "storagePrefix": {
-      "type": "string",
     }
   },
   "variables": {
