@@ -24,10 +24,6 @@
     },
     "publicIPAddresses_name": {
       "type": "string"
-    },
-    "storagename": {
-      "type": "string",
-      "defaultValue": "anilstoragetest"
     }
   },
   "functions": [],
