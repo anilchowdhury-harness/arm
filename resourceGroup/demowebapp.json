@@ -1,86 +1,106 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-        "webAppName": {
-            "type": "string",
-            "metadata": {
-                "description": "description"
-            }
-        },
-        "sku": {
-            "type": "string",
-            "defaultValue": "S1",
-            "metadata": {
-                "description": "description"
-            }
-        },
-        "linuxFxVersion": {
-            "type": "string",
-            "defaultValue": "JAVA|8-jre8",
-            "metadata": {
-                "description": "description"
-            }
-        }
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "webAppName": {
+      "type": "string",
+      "metadata": {
+        "description": "description"
+      }
     },
-    "functions": [],
-    "variables": {
-        "webAppPortalName": "[concat(parameters('webAppName'), '-webapp')]",
-        "appServicePlanName": "[concat('AppServicePlan-', parameters('webAppName'))]"
+    "sku": {
+      "type": "string",
+      "defaultValue": "S1",
+      "metadata": {
+        "description": "description"
+      }
     },
-    "resources": [{
+    "linuxFxVersion": {
+      "type": "string",
+      "defaultValue": "JAVA|8-jre8",
+      "metadata": {
+        "description": "description"
+      }
+    },
+    "publicIPAddresses_name": {
+      "type": "string"
+    }
+  },
+  "functions": [],
+  "variables": {
+    "webAppPortalName": "[concat(parameters('webAppName'), '-webapp')]",
+    "appServicePlanName": "[concat('AppServicePlan-', parameters('webAppName'))]"
+  },
+  "resources": [
+    {
+      "name": "[variables('appServicePlanName')]",
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2018-02-01",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "[parameters('sku')]",
+        "capacity": 2
+      },
+      "kind": "app,linux",
+      "tags": {
+        "displayName": "appServicePlan1"
+      },
+      "properties": {
         "name": "[variables('appServicePlanName')]",
-        "type": "Microsoft.Web/serverfarms",
-        "apiVersion": "2018-02-01",
-        "location": "[resourceGroup().location]",
-        "sku": {
-            "name": "[parameters('sku')]",
-            "capacity": 2
-        },
-        "kind": "app,linux",
-        "tags": {
-            "displayName": "appServicePlan1"
-        },
-        "properties": {
-            "name": "[variables('appServicePlanName')]",
-            "reserved": true
-
-        }
+        "reserved": true
+      }
     },
     {
+      "name": "[variables('webAppPortalName')]",
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2018-11-01",
+      "location": "[resourceGroup().location]",
+      "kind": "app",
+      "tags": {
+        "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/appServicePlan1')]": "Resource",
+        "displayName": "[variables('webAppPortalName')]"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]"
+      ],
+      "properties": {
         "name": "[variables('webAppPortalName')]",
-        "type": "Microsoft.Web/sites",
-        "apiVersion": "2018-11-01",
-        "location": "[resourceGroup().location]",
-        "kind": "app",
-        "tags": {
-            "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/appServicePlan1')]": "Resource",
-            "displayName": "[variables('webAppPortalName')]"
-        },
-        "dependsOn": [
-            "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]"
-        ],
-        "properties": {
-            "name": "[variables('webAppPortalName')]",
-            "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
-            "siteConfig": {
-                "linuxFxVersion": "[parameters('linuxFxVersion')]"
-            }
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
+        "siteConfig": {
+          "linuxFxVersion": "[parameters('linuxFxVersion')]"
         }
+      }
     },
     {
-       "name": "anilstoragetest",
-       "type": "Microsoft.Storage/storageAccounts",
-       "apiVersion": "2019-06-01",
-       "tags": {
-          "displayName": "anilstoragetest"
-       },
-       "location": "[resourceGroup().location]",
-       "kind": "StorageV2",
-       "sku": {
-           "name": "Standard_LRS"
-       }
-     }
-    ],
-    "outputs": {}
+      "name": "anilstoragetest",
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2019-06-01",
+      "tags": {
+        "displayName": "anilstoragetest"
+      },
+      "location": "[resourceGroup().location]",
+      "kind": "StorageV2",
+      "sku": {
+        "name": "Standard_LRS"
+      }
+    },
+    {
+      "type": "Microsoft.Network/publicIPAddresses",
+      "apiVersion": "2018-11-01",
+      "name": "[parameters('publicIPAddresses_name')]",
+      "location": "eastus",
+      "properties": {
+        "publicIPAddressVersion": "IPv4",
+        "publicIPAllocationMethod": "Dynamic",
+        "idleTimeoutInMinutes": 4
+      },
+      "dependsOn": []
+    }
+  ],
+  "outputs": {
+    "resourceID": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_name'))]"
+    }
+  }
 }
