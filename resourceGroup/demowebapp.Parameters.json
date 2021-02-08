@@ -7,9 +7,6 @@
     },
     "publicIPAddresses_name": {
       "value": "anil-publicIp"
-    },
-    "storagename": {
-      "value": "anilstoragetest"
     }
   }
 }
