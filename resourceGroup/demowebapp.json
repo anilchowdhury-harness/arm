@@ -24,13 +24,17 @@
     },
     "publicIPAddresses_name": {
       "type": "string"
+    },
+    "storageName": {
+      "type": "string",
+      "defaultValue": "anilstorage",
     }
   },
   "functions": [],
   "variables": {
     "webAppPortalName": "[concat(parameters('webAppName'), '-webapp')]",
-    "appServicePlanName": "[concat('AppServicePlan-', parameters('webAppName'))]"
-    "storageAccountName": "anilstoragetest"
+    "appServicePlanName": "[concat('AppServicePlan-', parameters('webAppName'))]",
+    "storageAccountName": "[concat(parameters('storageName'), '-test')]"
   },
   "resources": [
     {
