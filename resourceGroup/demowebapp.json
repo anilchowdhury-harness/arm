@@ -27,7 +27,7 @@
     },
     "storagename": {
       "type": "string",
-      "defaultValue": "anilstorage"
+      "defaultValue": "anilstoragetest"
     }
   },
   "functions": [],
