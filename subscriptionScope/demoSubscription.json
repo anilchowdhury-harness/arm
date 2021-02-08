@@ -13,7 +13,7 @@
     }
   },
   "variables": {
-    "storageName": "[concat(parameters('storagePrefix'), 'test'))]"
+    "storageName": "anil-subscriptionScope-storage"
   },
   "resources": [
     {
