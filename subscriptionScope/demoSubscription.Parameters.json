@@ -7,9 +7,6 @@
     },
     "rgLocation": {
       "value": "West US"
-    },
-    "storagePrefix": {
-      "value": "anilsubscope"
     }
   }
 }
