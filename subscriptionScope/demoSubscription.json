@@ -10,7 +10,6 @@
     },
     "storagePrefix": {
       "type": "string",
-      "maxLength": 30
     }
   },
   "variables": {
