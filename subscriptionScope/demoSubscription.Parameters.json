@@ -7,9 +7,6 @@
     },
     "rgLocation": {
       "value": "West US"
-    },
-    "publicIPAddresses_name": {
-      "value": "anil-publicIp"
     }
   }
 }
