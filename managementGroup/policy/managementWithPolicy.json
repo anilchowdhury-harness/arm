@@ -1,0 +1,67 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-08-01/managementGroupDeploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "mgName": {
+      "type": "string",
+      "defaultValue": "[concat('anil-mg-', uniqueString(newGuid()))]"
+    },
+    "parentMG": {
+      "type": "string"
+    },
+    "allowedLocations": {
+      "type": "array",
+      "defaultValue": [
+        "australiaeast",
+        "australiasoutheast",
+        "australiacentral"
+      ],
+      "metadata": {
+        "description": "An array of the allowed locations, all other locations will be denied by the created policy."
+      }
+    }
+  },
+  "resources": [
+    {
+      "name": "[parameters('mgName')]",
+      "type": "Microsoft.Management/managementGroups",
+      "apiVersion": "2020-05-01",
+      "scope": "/",
+      "location": "eastus",
+      "properties": {
+        "details": {
+          "parent": {
+            "id": "[tenantResourceId('Microsoft.Management/managementGroups', parameters('parentMG'))]"
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Authorization/policyDefinitions",
+      "name": "Anil-LocationRestriction",
+      "apiVersion": "2020-09-01",
+      "properties": {
+        "policyType": "Custom",
+        "mode": "All",
+        "parameters": {},
+        "policyRule": {
+          "if": {
+            "not": {
+              "field": "location",
+              "in": "[parameters('allowedLocations')]"
+            }
+          },
+          "then": {
+            "effect": "deny"
+          }
+        }
+      }
+    }
+  ],
+  "outputs": {
+    "output": {
+      "type": "string",
+      "value": "[parameters('mgName')]"
+    }
+  }
+}
