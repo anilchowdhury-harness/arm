@@ -4,6 +4,9 @@
   "parameters": {
     "webAppName": {
       "value": "anil-paramWebapp-git"
+    },
+    "publicIPAddresses_name": {
+      "value": "anil-publicIp"
     }
   }
 }
