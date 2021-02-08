@@ -30,6 +30,7 @@
   "variables": {
     "webAppPortalName": "[concat(parameters('webAppName'), '-webapp')]",
     "appServicePlanName": "[concat('AppServicePlan-', parameters('webAppName'))]"
+    "storageAccountName": "anilstoragetest"
   },
   "resources": [
     {
@@ -72,7 +73,7 @@
       }
     },
     {
-      "name": "anilstoragetest",
+      "name": "variables('storageAccountName')",
       "type": "Microsoft.Storage/storageAccounts",
       "apiVersion": "2019-06-01",
       "tags": {
@@ -101,6 +102,10 @@
     "resourceID": {
       "type": "string",
       "value": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_name'))]"
+    },
+   "storageAccount": {
+      "type": "string",
+      "value": "[variables('storageAccountName')]"
     }
   }
 }
