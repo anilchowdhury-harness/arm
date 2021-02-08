@@ -33,8 +33,7 @@
   "functions": [],
   "variables": {
     "webAppPortalName": "[concat(parameters('webAppName'), '-webapp')]",
-    "appServicePlanName": "[concat('AppServicePlan-', parameters('webAppName'))]",
-    "storageAccountName": "[concat(parameters('storagename'), 'test')]"
+    "appServicePlanName": "[concat('AppServicePlan-', parameters('webAppName'))]"
   },
   "resources": [
     {
@@ -77,7 +76,7 @@
       }
     },
     {
-      "name": "variables('storageAccountName')",
+      "name": "parameters('storagename')",
       "type": "Microsoft.Storage/storageAccounts",
       "apiVersion": "2019-06-01",
       "tags": {
@@ -109,7 +108,7 @@
     },
     "storageAccount": {
       "type": "string",
-      "value": "[variables('storageAccountName')]"
+      "value": "parameters('storagename')"
     }
   }
 }
