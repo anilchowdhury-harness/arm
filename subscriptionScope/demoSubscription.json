@@ -50,6 +50,36 @@
           "outputs": {}
         }
       }
+    },
+    {
+      "type": "Microsoft.Authorization/policyDefinitions",
+      "apiVersion": "2018-05-01",
+      "name": "locationpolicy",
+      "properties": {
+        "policyType": "Custom",
+        "parameters": {},
+        "policyRule": {
+          "if": {
+            "field": "location",
+            "equals": "northeurope"
+          },
+          "then": {
+            "effect": "deny"
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Authorization/policyAssignments",
+      "apiVersion": "2018-05-01",
+      "name": "location-lock",
+      "dependsOn": [
+        "locationpolicy"
+      ],
+      "properties": {
+        "scope": "[subscription().id]",
+        "policyDefinitionId": "[subscriptionResourceId('Microsoft.Authorization/policyDefinitions', 'locationpolicy')]"
+      }
     }
   ],
   "outputs": {}
