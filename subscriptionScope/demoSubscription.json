@@ -13,7 +13,7 @@
     }
   },
   "variables": {
-    "storageName": "anil-subscriptionScope-storage"
+    "storageName": "anilsubscopestorage"
   },
   "resources": [
     {
