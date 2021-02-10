@@ -96,5 +96,15 @@
       },
       "dependsOn": []
     }
-  ]
+  ],
+  "outputs": {
+    "resourceID": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_name'))]"
+    },
+    "storageAccount": {
+      "type": "string",
+      "value": "anilstoragetest1"
+    }
+  }
 }
