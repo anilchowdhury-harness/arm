@@ -1,0 +1,309 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "sites_anil_paramWebapp_git_webapp_name": {
+      "type": "String"
+    },
+    "publicIPAddresses_anil_publicIp_name": {
+      "type": "String"
+    },
+    "storageAccounts_anilstoragetest_name": {
+      "type": "String"
+    },
+    "serverfarms_AppServicePlan_anil_paramWebapp_git_name": {
+      "type": "String"
+    }
+  },
+  "variables": {},
+  "resources": [
+    {
+      "type": "Microsoft.Network/publicIPAddresses",
+      "apiVersion": "2020-05-01",
+      "name": "[parameters('publicIPAddresses_anil_publicIp_name')]",
+      "comments": "Generalized from resource: '/subscriptions/12d2db62-5aa9-471d-84bb-faa489b3e319/resourceGroups/anil-arm-test/providers/Microsoft.Network/publicIPAddresses/anil-publicIp'.",
+      "location": "eastus",
+      "sku": {
+        "name": "Basic"
+      },
+      "properties": {
+        "publicIPAddressVersion": "IPv4",
+        "publicIPAllocationMethod": "Dynamic",
+        "idleTimeoutInMinutes": 4,
+        "ipTags": []
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2020-08-01-preview",
+      "name": "[parameters('storageAccounts_anilstoragetest_name')]",
+      "comments": "Generalized from resource: '/subscriptions/12d2db62-5aa9-471d-84bb-faa489b3e319/resourceGroups/anil-arm-test/providers/Microsoft.Storage/storageAccounts/anilstoragetest'.",
+      "location": "westus",
+      "tags": {
+        "displayName": "anilstoragetest"
+      },
+      "sku": {
+        "name": "Standard_LRS",
+        "tier": "Standard"
+      },
+      "kind": "StorageV2",
+      "properties": {
+        "networkAcls": {
+          "bypass": "AzureServices",
+          "virtualNetworkRules": [],
+          "ipRules": [],
+          "defaultAction": "Allow"
+        },
+        "supportsHttpsTrafficOnly": true,
+        "encryption": {
+          "services": {
+            "file": {
+              "keyType": "Account",
+              "enabled": true
+            },
+            "blob": {
+              "keyType": "Account",
+              "enabled": true
+            }
+          },
+          "keySource": "Microsoft.Storage"
+        },
+        "accessTier": "Hot"
+      }
+    },
+    {
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2018-02-01",
+      "name": "[parameters('serverfarms_AppServicePlan_anil_paramWebapp_git_name')]",
+      "comments": "Generalized from resource: '/subscriptions/12d2db62-5aa9-471d-84bb-faa489b3e319/resourceGroups/anil-arm-test/providers/Microsoft.Web/serverfarms/AppServicePlan-anil-paramWebapp-git'.",
+      "location": "West US",
+      "tags": {
+        "displayName": "appServicePlan1"
+      },
+      "sku": {
+        "name": "S1",
+        "tier": "Standard",
+        "size": "S1",
+        "family": "S",
+        "capacity": 2
+      },
+      "kind": "linux",
+      "properties": {
+        "perSiteScaling": false,
+        "maximumElasticWorkerCount": 1,
+        "isSpot": false,
+        "reserved": true,
+        "isXenon": false,
+        "hyperV": false,
+        "targetWorkerCount": 0,
+        "targetWorkerSizeId": 0
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts/blobServices",
+      "apiVersion": "2020-08-01-preview",
+      "name": "[concat(parameters('storageAccounts_anilstoragetest_name'), '/default')]",
+      "comments": "Generalized from resource: '/subscriptions/12d2db62-5aa9-471d-84bb-faa489b3e319/resourceGroups/anil-arm-test/providers/Microsoft.Storage/storageAccounts/anilstoragetest/blobServices/default'.",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_anilstoragetest_name'))]"
+      ],
+      "sku": {
+        "name": "Standard_LRS",
+        "tier": "Standard"
+      },
+      "properties": {
+        "cors": {
+          "corsRules": []
+        },
+        "deleteRetentionPolicy": {
+          "enabled": false
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts/fileServices",
+      "apiVersion": "2020-08-01-preview",
+      "name": "[concat(parameters('storageAccounts_anilstoragetest_name'), '/default')]",
+      "comments": "Generalized from resource: '/subscriptions/12d2db62-5aa9-471d-84bb-faa489b3e319/resourceGroups/anil-arm-test/providers/Microsoft.Storage/storageAccounts/anilstoragetest/fileServices/default'.",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_anilstoragetest_name'))]"
+      ],
+      "sku": {
+        "name": "Standard_LRS",
+        "tier": "Standard"
+      },
+      "properties": {
+        "protocolSettings": {
+          "smb": {}
+        },
+        "cors": {
+          "corsRules": []
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts/queueServices",
+      "apiVersion": "2020-08-01-preview",
+      "name": "[concat(parameters('storageAccounts_anilstoragetest_name'), '/default')]",
+      "comments": "Generalized from resource: '/subscriptions/12d2db62-5aa9-471d-84bb-faa489b3e319/resourceGroups/anil-arm-test/providers/Microsoft.Storage/storageAccounts/anilstoragetest/queueServices/default'.",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_anilstoragetest_name'))]"
+      ],
+      "properties": {
+        "cors": {
+          "corsRules": []
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Storage/storageAccounts/tableServices",
+      "apiVersion": "2020-08-01-preview",
+      "name": "[concat(parameters('storageAccounts_anilstoragetest_name'), '/default')]",
+      "comments": "Generalized from resource: '/subscriptions/12d2db62-5aa9-471d-84bb-faa489b3e319/resourceGroups/anil-arm-test/providers/Microsoft.Storage/storageAccounts/anilstoragetest/tableServices/default'.",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccounts_anilstoragetest_name'))]"
+      ],
+      "properties": {
+        "cors": {
+          "corsRules": []
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2018-11-01",
+      "name": "[parameters('sites_anil_paramWebapp_git_webapp_name')]",
+      "comments": "Generalized from resource: '/subscriptions/12d2db62-5aa9-471d-84bb-faa489b3e319/resourceGroups/anil-arm-test/providers/Microsoft.Web/sites/anil-paramWebapp-git-webapp'.",
+      "location": "West US",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_AppServicePlan_anil_paramWebapp_git_name'))]"
+      ],
+      "tags": {
+        "displayName": "anil-paramWebapp-git-webapp",
+        "hidden-related:/subscriptions/12d2db62-5aa9-471d-84bb-faa489b3e319/resourceGroups/anil-arm-test/providers/Microsoft.Web/serverfarms/appServicePlan1": "Resource"
+      },
+      "kind": "app,linux",
+      "properties": {
+        "enabled": true,
+        "hostNameSslStates": [
+          {
+            "name": "anil-paramwebapp-git-webapp.azurewebsites.net",
+            "sslState": "Disabled",
+            "hostType": "Standard"
+          },
+          {
+            "name": "anil-paramwebapp-git-webapp.scm.azurewebsites.net",
+            "sslState": "Disabled",
+            "hostType": "Repository"
+          }
+        ],
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('serverfarms_AppServicePlan_anil_paramWebapp_git_name'))]",
+        "reserved": true,
+        "isXenon": false,
+        "hyperV": false,
+        "siteConfig": {},
+        "scmSiteAlsoStopped": false,
+        "clientAffinityEnabled": true,
+        "clientCertEnabled": false,
+        "hostNamesDisabled": false,
+        "containerSize": 0,
+        "dailyMemoryTimeQuota": 0,
+        "httpsOnly": false,
+        "redundancyMode": "None"
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites/config",
+      "apiVersion": "2018-11-01",
+      "name": "[concat(parameters('sites_anil_paramWebapp_git_webapp_name'), '/web')]",
+      "comments": "Generalized from resource: '/subscriptions/12d2db62-5aa9-471d-84bb-faa489b3e319/resourceGroups/anil-arm-test/providers/Microsoft.Web/sites/anil-paramWebapp-git-webapp/config/web'.",
+      "location": "West US",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', parameters('sites_anil_paramWebapp_git_webapp_name'))]"
+      ],
+      "tags": {
+        "displayName": "anil-paramWebapp-git-webapp",
+        "hidden-related:/subscriptions/12d2db62-5aa9-471d-84bb-faa489b3e319/resourceGroups/anil-arm-test/providers/Microsoft.Web/serverfarms/appServicePlan1": "Resource"
+      },
+      "properties": {
+        "numberOfWorkers": 1,
+        "defaultDocuments": [
+          "Default.htm",
+          "Default.html",
+          "Default.asp",
+          "index.htm",
+          "index.html",
+          "iisstart.htm",
+          "default.aspx",
+          "index.php",
+          "hostingstart.html"
+        ],
+        "netFrameworkVersion": "v4.0",
+        "linuxFxVersion": "JAVA|8-jre8",
+        "requestTracingEnabled": false,
+        "remoteDebuggingEnabled": false,
+        "remoteDebuggingVersion": "VS2019",
+        "httpLoggingEnabled": false,
+        "logsDirectorySizeLimit": 35,
+        "detailedErrorLoggingEnabled": false,
+        "publishingUsername": "$anil-paramWebapp-git-webapp",
+        "azureStorageAccounts": {},
+        "scmType": "None",
+        "use32BitWorkerProcess": true,
+        "webSocketsEnabled": false,
+        "alwaysOn": true,
+        "managedPipelineMode": "Integrated",
+        "virtualApplications": [
+          {
+            "virtualPath": "/",
+            "physicalPath": "site\\wwwroot",
+            "preloadEnabled": true
+          }
+        ],
+        "loadBalancing": "LeastRequests",
+        "experiments": {
+          "rampUpRules": []
+        },
+        "autoHealEnabled": false,
+        "localMySqlEnabled": false,
+        "ipSecurityRestrictions": [
+          {
+            "ipAddress": "Any",
+            "action": "Allow",
+            "priority": 1,
+            "name": "Allow all",
+            "description": "Allow all access"
+          }
+        ],
+        "scmIpSecurityRestrictions": [
+          {
+            "ipAddress": "Any",
+            "action": "Allow",
+            "priority": 1,
+            "name": "Allow all",
+            "description": "Allow all access"
+          }
+        ],
+        "scmIpSecurityRestrictionsUseMain": false,
+        "http20Enabled": false,
+        "minTlsVersion": "1.2",
+        "ftpsState": "AllAllowed",
+        "reservedInstanceCount": 0
+      }
+    },
+    {
+      "type": "Microsoft.Web/sites/hostNameBindings",
+      "apiVersion": "2018-11-01",
+      "name": "[concat(parameters('sites_anil_paramWebapp_git_webapp_name'), '/', parameters('sites_anil_paramWebapp_git_webapp_name'), '.azurewebsites.net')]",
+      "comments": "Generalized from resource: '/subscriptions/12d2db62-5aa9-471d-84bb-faa489b3e319/resourceGroups/anil-arm-test/providers/Microsoft.Web/sites/anil-paramWebapp-git-webapp/hostNameBindings/anil-paramwebapp-git-webapp.azurewebsites.net'.",
+      "location": "West US",
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/sites', parameters('sites_anil_paramWebapp_git_webapp_name'))]"
+      ],
+      "properties": {
+        "siteName": "anil-paramWebapp-git-webapp",
+        "hostNameType": "Verified"
+      }
+    }
+  ]
+}
