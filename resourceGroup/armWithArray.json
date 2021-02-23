@@ -78,7 +78,7 @@
       }
     },
     {
-      "name": "anilstoragetest-harness",
+      "name": "anilstoragetestharness",
       "type": "Microsoft.Storage/storageAccounts",
       "apiVersion": "2019-06-01",
       "tags": {
@@ -156,7 +156,7 @@
   "outputs": {
     "storageAccount": {
       "type": "string",
-      "value": "harness-arm-test-publicIP"
+      "value": "anilstoragetestharness"
     },
     "ipAddresses": {
       "type": "array",
