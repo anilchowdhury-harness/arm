@@ -63,7 +63,6 @@
       "location": "[resourceGroup().location]",
       "kind": "app",
       "tags": {
-        "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/appServicePlan1')]": "Resource",
         "displayName": "[variables('webAppPortalName')]"
       },
       "dependsOn": [
