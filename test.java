@@ -4,8 +4,12 @@ import static io.harness.azure.model.AzureConstants.SLOT_SWAP_JOB_PROCESSOR_STR;
 
 import static com.microsoft.azure.management.resources.WhatIfResultFormat.FULL_RESOURCE_PAYLOADS;
 
+import io.harness.serializer.JsonUtils;
+
 import software.wings.beans.AzureConfig;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microsoft.azure.PagedList;
 import com.microsoft.azure.management.Azure;
 import com.microsoft.azure.management.appservice.CsmSlotEntity;
@@ -40,6 +44,9 @@ import com.microsoft.azure.management.resources.implementation.DeploymentsInner;
 import com.microsoft.azure.management.resources.implementation.WhatIfOperationResultInner;
 import com.microsoft.rest.ServiceCallback;
 import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -48,6 +55,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
+import org.apache.commons.io.IOUtils;
 import org.joda.time.DateTime;
 import rx.Completable;
 import rx.Subscriber;
@@ -107,6 +115,14 @@ import rx.schedulers.Schedulers;
  */
 
 public class AzureAppServicePoc extends AzureHelperService {
+  private static final String CLIENT_ID = "baca1841-c593-407b-8793-98d3781f4fbf";
+  private static final String TENANT_ID = "b229b2bb-5f33-4d22-bce0-730f6474e906";
+  private static final String KEY = "3dH7aKJ/0rwGh+dx0YheGcUbh1dxYfrfTqTpKFcujd4=";
+  private static final String SUBSCRIPTION_ID = "12d2db62-5aa9-471d-84bb-faa489b3e319";
+
+  private static final String NEW_CLIENT_ID = "2fffcc83-09a8-450f-87f5-a25e3942dd10";
+  private static final String NEW_KEY = "LcKHVgGfvwlKIx6Sm8_.1eb82i-a8-OJ9Z";
+  private static final String CDP_NON_PROD_SUBSCRIPTION_ID = "5aef6b46-7daa-45ea-a8d0-783aab69dea3";
 
   public static void main(String[] args) {
     AzureAppServicePoc poc = new AzureAppServicePoc();
@@ -143,7 +159,6 @@ public class AzureAppServicePoc extends AzureHelperService {
 
   private void testARM() {
     //    testWhatIf();
-    //    testArm();
     //    deployManagementGroupScope();
     //    deploySubscriptionScope();
     deployResourceGroupScope();
@@ -538,13 +553,20 @@ public class AzureAppServicePoc extends AzureHelperService {
   }
 
   private void deployResourceGroupScope() {
-    String deploymentName = "test15";
+    String deploymentName = "array-test";
     String resourceGroup = "anil-arm-test";
     String contentVersion = "1.0.0.0";
+    //    String templatePath =
+    //    "https://raw.githubusercontent.com/anilchowdhury-harness/arm/main/resourceGroup/demowebapp.json";
+    //        String templatePath =
+    //            "https://raw.githubusercontent.com/anilchowdhury-harness/arm/main/resourceGroup/demowebappWithOutOutPuts.json";
+    //    String templatePath =
+    //        "https://raw.githubusercontent.com/anilchowdhury-harness/arm/main/exportedTemplateWithIncludeParametersDefault.json";
     String templatePath =
-        "https://raw.githubusercontent.com/anilchowdhury-harness/arm/main/resourceGroup/demowebapp.json";
+        "https://raw.githubusercontent.com/anilchowdhury-harness/arm/main/resourceGroup/armWithArray.json";
     String paramsPath =
-        "https://raw.githubusercontent.com/anilchowdhury-harness/arm/main/resourceGroup/demowebapp.Parameters.json";
+        "https://raw.githubusercontent.com/anilchowdhury-harness/arm/main/resourceGroup/armWithArray.Parameters.json";
+
     Azure azureClient = getAzureClient(getAzureConfig(), SUBSCRIPTION_ID);
 
     DeploymentProperties prop = new DeploymentProperties();
@@ -562,6 +584,10 @@ public class AzureAppServicePoc extends AzureHelperService {
       ARMDeploymentContext context =
           new ARMDeploymentContext(ARMScope.RESOURCE_GROUP, resourceGroup, "", "", "", deploymentName);
       steadyStateCheck(context, azureClient);
+      //      System.out.println(azureClient.resourceGroups()
+      //                             .getByName(resourceGroup)
+      //                             .exportTemplate(ResourceGroupExportTemplateOptions.INCLUDE_PARAMETER_DEFAULT_VALUE)
+      //                             .templateJson());
     } catch (Exception exception) {
       System.out.println(exception.getMessage());
     }
@@ -607,12 +633,12 @@ public class AzureAppServicePoc extends AzureHelperService {
     }
     System.out.println(String.format(
         "%nDeployment - [%s] is completed with status - [%s]", context.deploymentName, provisioningState));
-    System.out.println(String.format("Deployment Outputs - [%s] ", getOutputs(azureClient, context)));
+    System.out.println(
+        String.format("Deployment Outputs - [%s] ", JsonUtils.prettifyJsonString(getOutputs(azureClient, context))));
   }
 
   private String getOutputs(Azure azureClient, ARMDeploymentContext context) {
     DeploymentsInner deployments = azureClient.deployments().manager().inner().deployments();
-    String output = "";
     DeploymentExtendedInner extendedInner;
     switch (context.scope) {
       case RESOURCE_GROUP:
@@ -631,10 +657,21 @@ public class AzureAppServicePoc extends AzureHelperService {
         throw new IllegalStateException("Unexpected value: " + context.scope);
     }
     Object outputs = extendedInner.properties().outputs();
-    if (outputs != null) {
-      output = outputs.toString();
+    String jsonOutput = JsonUtils.asJson(outputs);
+    saveARMOutputs(jsonOutput);
+    return jsonOutput;
+  }
+
+  private void saveARMOutputs(String jsonOutput) {
+    Map<String, Object> outputMap = new LinkedHashMap<>();
+    try {
+      TypeReference<HashMap<String, Object>> typeRef = new TypeReference<HashMap<String, Object>>() {};
+      Map<String, Object> json = new ObjectMapper().readValue(IOUtils.toInputStream(jsonOutput), typeRef);
+
+      json.forEach((key, object) -> outputMap.put(key, ((Map<String, Object>) object).get("value")));
+    } catch (IOException ignored) {
     }
-    return output;
+    //    System.out.println(outputMap.toString());
   }
 
   private boolean isDeploymentComplete(String provisioningState) {
