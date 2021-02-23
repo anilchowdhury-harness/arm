@@ -87,7 +87,7 @@
     {
       "type": "Microsoft.Network/publicIPAddresses",
       "apiVersion": "2020-05-01",
-      "name": "harness-arm-test-publicIP",
+      "name": "[parameters('publicIPAddresses_name')]",
       "location": "eastus",
       "sku": {
         "name": "Basic"
@@ -168,6 +168,10 @@
           "value": "[copyIndex(1)]"
         }
       }
+    },
+    "publicIp": {
+      "type": "string",
+      "value": "[parameters('publicIPAddresses_name')]"
     },
     "appPlan": {
       "type": "string",
