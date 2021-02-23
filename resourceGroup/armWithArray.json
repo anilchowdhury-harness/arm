@@ -5,10 +5,85 @@
     "count": {
       "type": "int",
       "defaultValue": 3
+    },
+    "webAppName": {
+      "type": "string",
+      "metadata": {
+        "description": "description"
+      }
+    },
+    "sku": {
+      "type": "string",
+      "defaultValue": "S1",
+      "metadata": {
+        "description": "description"
+      }
+    },
+    "linuxFxVersion": {
+      "type": "string",
+      "defaultValue": "JAVA|8-jre8",
+      "metadata": {
+        "description": "description"
+      }
     }
   },
-  "variables": {},
+  "variables": {
+    "webAppPortalName": "[concat(parameters('webAppName'), '-webapp')]",
+    "appServicePlanName": "[concat('AppServicePlan-', parameters('webAppName'))]"
+  },
   "resources": [
+    {
+      "name": "[variables('appServicePlanName')]",
+      "type": "Microsoft.Web/serverfarms",
+      "apiVersion": "2018-02-01",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "[parameters('sku')]",
+        "capacity": 2
+      },
+      "kind": "app,linux",
+      "tags": {
+        "displayName": "appServicePlan1"
+      },
+      "properties": {
+        "name": "[variables('appServicePlanName')]",
+        "reserved": true
+      }
+    },
+    {
+      "name": "[variables('webAppPortalName')]",
+      "type": "Microsoft.Web/sites",
+      "apiVersion": "2018-11-01",
+      "location": "[resourceGroup().location]",
+      "kind": "app",
+      "tags": {
+        "[concat('hidden-related:', resourceGroup().id, '/providers/Microsoft.Web/serverfarms/appServicePlan1')]": "Resource",
+        "displayName": "[variables('webAppPortalName')]"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]"
+      ],
+      "properties": {
+        "name": "[variables('webAppPortalName')]",
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]",
+        "siteConfig": {
+          "linuxFxVersion": "[parameters('linuxFxVersion')]"
+        }
+      }
+    },
+    {
+      "name": "anilstoragetest-harness",
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2019-06-01",
+      "tags": {
+        "displayName": "anilstoragetest"
+      },
+      "location": "[resourceGroup().location]",
+      "kind": "StorageV2",
+      "sku": {
+        "name": "Standard_LRS"
+      }
+    },
     {
       "type": "Microsoft.Network/publicIPAddresses",
       "apiVersion": "2020-05-01",
@@ -93,6 +168,14 @@
           "value": "[copyIndex(1)]"
         }
       }
+    },
+    "appPlan": {
+      "type": "string",
+      "value": "[variables('appServicePlanName')]"
+    },
+    "webApp": {
+      "type": "string",
+      "value": "[variables('webAppPortalName')]"
     }
   }
 }
