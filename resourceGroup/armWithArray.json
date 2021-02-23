@@ -6,6 +6,12 @@
       "type": "int",
       "defaultValue": 3
     },
+    "publicIPAddresses_name": {
+      "type": "string",
+      "metadata": {
+        "description": "description"
+      }
+    },
     "webAppName": {
       "type": "string",
       "metadata": {
