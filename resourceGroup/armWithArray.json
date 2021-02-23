@@ -78,6 +78,23 @@
       }
     },
     {
+      "apiVersion": "2020-06-01",
+      "type": "Microsoft.Web/sites/slots",
+      "name": "[concat(variables('webAppPortalName'), '/testSlot')]",
+      "kind": "app",
+      "location": "[resourceGroup().location]",
+      "comments": "This specifies the web app slots.",
+      "tags": {
+        "displayName": "WebAppSlots"
+      },
+      "properties": {
+        "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('appServicePlanName'))]"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Web/Sites', variables('webAppPortalName'))]"
+      ]
+    },
+    {
       "name": "anilstoragetestharness",
       "type": "Microsoft.Storage/storageAccounts",
       "apiVersion": "2019-06-01",
@@ -186,6 +203,10 @@
     "webApp": {
       "type": "string",
       "value": "[variables('webAppPortalName')]"
+    },
+    "slot": {
+      "type": "string",
+      "value": "[concat(variables('webAppPortalName'), '/testSlot')]"
     }
   }
 }
