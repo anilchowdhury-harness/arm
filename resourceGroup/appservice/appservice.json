@@ -76,7 +76,7 @@
         "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', variables('servicePlanName'))]"
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Web/Sites', [parameters('siteName')])]"
+        "[resourceId('Microsoft.Web/Sites', parameters('siteName'))]"
       ]
     }
   ]
